@@ -4,10 +4,10 @@ jobs:
     docker:
       - image: node:10
     steps:
+      - checkout
       - run:
           name: build lambda
           command: |
-            ls
             cd contact-requests-collector
             npm install
             node_modules/.bin/gulp package

@@ -1,0 +1,11 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: nodejs:10
+    steps:
+      - run:
+          name: build lambda
+          command: |
+            npm install
+            node_modules/.bin/gulp package

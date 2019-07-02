@@ -3,23 +3,22 @@ version: 2
 jobs:
   # The build job
   build:
-    working_directory: contact-requests-collector
     docker:
       - image: node:10
     steps:
       - checkout
       - run:
           name: Install local dependencies
-          command: npm install
+          command: cd contact-requests-collector && npm install
       - run:
           name: Linting
-          command: node_modules/.bin/gulp lint
+          command: cd contact-requests-collector && node_modules/.bin/gulp lint
       - run:
           name: Compile
-          command: node_modules/.bin/gulp compile
+          command: cd contact-requests-collector && node_modules/.bin/gulp compile
       - run:
           name: Package
-          command: node_modules/.bin/gulp package
+          command: cd contact-requests-collector && node_modules/.bin/gulp package
 
 workflows:
   version: 2

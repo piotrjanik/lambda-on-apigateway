@@ -1,5 +1,4 @@
 variable "policy" {
-  default = null
 }
 resource "aws_iam_role" "role" {
   name = format("%s-%s",var.name, "role")
@@ -20,7 +19,6 @@ EOF
 }
 
 resource "aws_iam_role_policy" "lambda_policy" {
-  count = var.policy != null ? 1 : 0
   name = format("%s-%s",var.name, "policy")
   policy = var.policy
   role = aws_iam_role.role.id

@@ -1,7 +1,12 @@
+variable "deploy" {
+  default = false
+}
 module "api" {
   source = "./modules/api"
-  name = "contact-form-api"
+  name = "contact-requests-api"
   regional = true
+  stage = "test"
+  deploy = var.deploy
 }
 
 module "resource" {
@@ -16,4 +21,36 @@ module "resource" {
       "name" = module.lambda.name
     }
   }
+  validator = module.api.body_validator_id
+
+  schema = <<EOF
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "name",
+    "email",
+    "message"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "The Name Schema",
+      "pattern": "^(.*)$"
+    },
+    "email": {
+      "type": "string",
+      "pattern": "^(.*)$"
+    },
+    "message": {
+      "type": "string",
+      "title": "The Message Schema",
+      "pattern": "^(.*)$"
+    }
+  }
+}
+EOF
+
 }

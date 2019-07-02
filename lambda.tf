@@ -3,21 +3,28 @@ module "lambda" {
   description = "Collect Contact Requests"
   memory = "128"
   handler = "handler.handler"
-  name = "contacts-req-collectors"
+  name = "contact-requests"
   runtime = "nodejs10.x"
-  policy = data.aws_iam_policy_document.table.json
-  source_dir = "contact-requests-collector/dist"
+  policy = data.aws_iam_policy_document.privileges.json
+  zip_file = "contact-requests-collector/build/contact-requests-collector.zip"
   variables = {
-    "TEST" = "TEST"
+    "TOPIC_ARN" = module.topic.arn
   }
 }
 
-data "aws_iam_policy_document" "table" {
+data "aws_iam_policy_document" "privileges" {
   statement {
     effect = "Allow"
     actions = [
       "dynamodb:PutItem"]
     resources = [
       "arn:aws:dynamodb:*:*:table/contact-requests"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "SNS:Publish"]
+    resources = [
+      module.topic.arn]
   }
 }

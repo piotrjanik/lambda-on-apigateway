@@ -6,12 +6,11 @@ export module ContactRequestsDao {
     const dynamoDb = new DynamoDB.DocumentClient();
 
     export function put(table: string, contactRequest: ContactRequestModel): Promise<PromiseResult<AWS.DynamoDB.DocumentClient.PutItemOutput, AWSError>> {
-        const body = contactRequest;
-        body.uuid = uuid.v1();
+        contactRequest.uuid = uuid.v1();
         // write the todo to the database
         return dynamoDb.put({
             TableName: table,
-            Item: body
+            Item: contactRequest
         }).promise();
     }
 
